@@ -1,0 +1,4 @@
+INDEX VERSION 1.126+C:\gitFolder\magicBall2\.metadata\.plugins\org.eclipse.jdt.core
+956453848.index
+3900612997.index
+3830429066.index

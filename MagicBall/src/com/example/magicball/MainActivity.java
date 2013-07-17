@@ -8,16 +8,17 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Handler;
+import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
 import android.view.Menu;
 import android.view.Window;
 import android.widget.ImageView;
 
 public class MainActivity extends Activity {
 
-	Handler handler = new Handler();
-	
+	private SpeechRecognizer mRecognizer;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -41,26 +42,48 @@ public class MainActivity extends Activity {
 							}).show();
 		} else {
 			mic.setVisibility(android.view.View.VISIBLE);
-			Sound sound = new Sound();
-			handler.postDelayed(new soundHandler(), 1000);
+			Intent i = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+			i.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
+			i.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR");
+
+			mRecognizer = SpeechRecognizer.createSpeechRecognizer(this); // 음성인식 객체
+			mRecognizer.setRecognitionListener(listener); // 음성인식 리스너 등록
+			mRecognizer.startListening(i);
 		}
 	}
 
-	class soundHandler implements Runnable {
-		public void run() {
-			Intent i = new Intent(MainActivity.this, SoundActivity.class);
+	private RecognitionListener listener = new RecognitionListener() {
+
+		@Override
+		public void onBeginningOfSpeech() {}
+		@Override
+		public void onBufferReceived(byte[] buffer) {}
+		@Override
+		public void onEndOfSpeech() {
+			Intent i = new Intent(MainActivity.this, AfterVoiceActivity.class);
 			startActivity(i);
 			finish();
 			overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-//			Intent i = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-//			i.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
-//			i.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR");
-//			i.putExtra(RecognizerIntent.EXTRA_PROMPT, "말을 하세요");
-//			
-//			startActivityForResult(i, GOOGLE_STT);
 		}
-	}
-
+		@Override
+		public void onError(int error) {
+		}
+		@Override
+		public void onEvent(int eventType, Bundle params) {
+		}
+		@Override
+		public void onPartialResults(Bundle partialResults) {
+		}
+		@Override
+		public void onReadyForSpeech(Bundle params) {
+		}
+		@Override
+		public void onResults(Bundle results) {
+		}
+		@Override
+		public void onRmsChanged(float rmsdB) {
+		}
+	};
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -68,19 +91,21 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
-	public boolean isNetworkConnected(Context context){
-	    boolean isConnected = false;
+	public boolean isNetworkConnected(Context context) {
+		boolean isConnected = false;
 
-	    ConnectivityManager manager = 
-	        (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
-	    NetworkInfo mobile = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-	    NetworkInfo wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+		ConnectivityManager manager = (ConnectivityManager) context
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo mobile = manager
+				.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+		NetworkInfo wifi = manager
+				.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-	    if (mobile.isConnected() || wifi.isConnected()){
-	        isConnected = true;
-	    }else{
-	        isConnected = false;
-	    }
-	    return isConnected;
+		if (mobile.isConnected() || wifi.isConnected()) {
+			isConnected = true;
+		} else {
+			isConnected = false;
+		}
+		return isConnected;
 	}
 }
