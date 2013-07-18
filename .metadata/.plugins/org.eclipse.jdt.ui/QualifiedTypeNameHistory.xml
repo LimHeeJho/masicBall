@@ -4,4 +4,6 @@
 <fullyQualifiedTypeName name="android.R.id"/>
 <fullyQualifiedTypeName name="android.R.anim"/>
 <fullyQualifiedTypeName name="com.example.magicball.R.id"/>
+<fullyQualifiedTypeName name="android.view.animation.AnimationUtils"/>
+<fullyQualifiedTypeName name="com.example.magicball.R.anim"/>
 </qualifiedTypeNameHistroy>

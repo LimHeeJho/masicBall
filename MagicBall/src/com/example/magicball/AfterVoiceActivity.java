@@ -3,18 +3,23 @@ package com.example.magicball;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 public class AfterVoiceActivity extends Activity {
+	ImageView ball;
+	Animation rotate;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-	    super.onCreate(savedInstanceState);
-	    requestWindowFeature(Window.FEATURE_NO_TITLE);
-	    setContentView(R.layout.after_voice);
-	    ImageView ball = (ImageView)findViewById(R.id.ball);
-	    
+		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setContentView(R.layout.after_voice);
+		ball = (ImageView) findViewById(R.id.rotateball);
+		rotate = AnimationUtils.loadAnimation(getApplicationContext(),
+				R.anim.rotate);
+		ball.startAnimation(rotate);
 	}
-
 }

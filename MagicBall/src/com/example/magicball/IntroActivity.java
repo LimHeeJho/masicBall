@@ -16,7 +16,7 @@ public class IntroActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.splash);
 
-		handler.postDelayed(new splashHandler(), 3000);
+		handler.postDelayed(new splashHandler(), 2000);
 		// TODO Auto-generated method stub
 	}
 
